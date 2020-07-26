@@ -54,18 +54,17 @@ class Board {
     celebrate() {
         background(color(0, 0, 50, 0.5));
         textAlign(CENTER);
-        textSize(40);
+        textSize(20);
         fill(255);
         stroke(0);
         strokeWeight(2);
-        text(`You won! in ${time}s & ${moves} moves`, width/2, height/2);
-        text(`High score: ${timeHigh}s & ${movesHigh} moves`, width/2, height/2 + 50);
+        text("You won!", width/2, height/2);
+        text("High score\n "+"Time: "+timeHigh+"\n"+"Moves: "+movesHigh, width/2, height/2 + 50);
         if (time > timeHigh && moves > movesHigh) {
             text(`New high score: ${timeHigh}s & ${movesHigh} moves`, width/2, height/2 + 50);
             localStorage.setItem("timeHigh", timeHigh);
             localStorage.setItem("movesHigh", movesHigh);
-        }
-        
+        };      
     }
 };
 
@@ -90,6 +89,7 @@ class Piece {
         stroke(0);
         let borderRadius = 5;
         rect(this.x, this.y, this.size, this.size, borderRadius);
+        textAlign(CENTER);
         textSize(22);
         fill(0);
         text(this.value.toString(), this.x + this.size/2, this.y + this.size/2);
@@ -238,8 +238,8 @@ function setup() {
 function draw() {    
     frameRate(60);
     background(200);
-    board.showBoard();
     board.updateBoard();
+    board.showBoard();
     if (board.isWinning() == true) {
         board.celebrate();
     };
