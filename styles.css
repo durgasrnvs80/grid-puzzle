@@ -39,7 +39,8 @@ main {
 
 footer {
     height: 10%;
-    width: 100%;
+    width: 300px;
+    flex-direction: row;
 }
 
 footer p {

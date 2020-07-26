@@ -1,6 +1,12 @@
 const puzzleContainer = document.querySelector("#puzzle-container");
+const timeP = document.querySelector("#time");
 
 let board;
+
+let time;
+let moves;
+let timeH = localStorage.getItem("timeH") || "NA";
+let movesH = localStorage.getItem("movesH") || "NA";
 
 class Board {
     constructor() {
@@ -52,7 +58,14 @@ class Board {
         fill(255);
         stroke(0);
         strokeWeight(2);
-        text("You won!", width/2, height/2);
+        text(`You won! in ${time}s & ${moves} moves`, width/2, height/2);
+        text(`High score: ${timeHigh}s & ${movesHigh} moves`, width/2, height/2 + 50);
+        if (time > timeHigh && moves > movesHigh) {
+            text(`New high score: ${timeHigh}s & ${movesHigh} moves`, width/2, height/2 + 50);
+            localStorage.setItem("timeHigh", timeHigh);
+            localStorage.setItem("movesHigh", movesHigh);
+        }
+        
     }
 };
 
@@ -114,6 +127,7 @@ class Piece {
                 let temp = board.board[rows][cols];
                 board.board[rows][cols] = top;
                 board.board[rows - 1][cols] = temp;
+                moves++;
             };
         };
         //right
@@ -123,6 +137,7 @@ class Piece {
                 let temp = board.board[rows][cols];
                 board.board[rows][cols] = right;
                 board.board[rows][cols + 1] = temp;
+                moves++;
             };
         };
         //bottom
@@ -132,6 +147,7 @@ class Piece {
                 let temp = board.board[rows][cols];
                 board.board[rows][cols] = bottom;
                 board.board[rows + 1][cols] = temp;
+                moves++;
             };
         };
         //left
@@ -141,6 +157,7 @@ class Piece {
                 let temp = board.board[rows][cols];
                 board.board[rows][cols] = left;
                 board.board[rows][cols - 1] = temp;
+                moves++;
             };
         };
         console.log(board.board);
@@ -183,6 +200,8 @@ function mouseClicked() {
 }
 
 function setup() {
+    time = 0;
+    moves = 0;
     let width = 300;
     let height = 300;
     let canvas = createCanvas(width, height);
@@ -195,8 +214,8 @@ function setup() {
     for(let rows = 0; rows < board.size; rows++){
         for(let cols = 0; cols < board.size; cols++){
             let spacing = 100;
-            let piece = new Piece(rows * spacing, cols * spacing, rows * board.size + cols);
-            board.board[rows][cols] = piece + 1;
+            let piece = new Piece(rows * spacing, cols * spacing, rows * board.size + cols + 1);
+            board.board[rows][cols] = piece;
         };
     };
     board.board[board.size - 1][board.size - 1].value = "x";
@@ -216,7 +235,7 @@ function setup() {
     console.log("Winning board:", board.winningBoard);
 }
 
-function draw() {
+function draw() {    
     frameRate(60);
     background(200);
     board.showBoard();
@@ -224,4 +243,6 @@ function draw() {
     if (board.isWinning() == true) {
         board.celebrate();
     };
+    time = floor(millis() / 1000);
+    timeP.textContent = `Time: ${time}s  Moves: ${moves}`;
 }
