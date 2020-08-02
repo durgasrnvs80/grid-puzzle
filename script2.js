@@ -24,7 +24,7 @@ class Piece {
     update(row, col) {
         this.targetX = col * this.size;
         this.targetY = row * this.size;
-        console.log(`targetX: ${this.targetX}, targetY: ${this.targetY}`);
+        //console.log(`targetX: ${this.targetX}, targetY: ${this.targetY}`);
     }
 
     animate() {
@@ -105,19 +105,19 @@ class Board {
         let row = floor(map(mouseY, 0, 300, 0, 3));
         let col = floor(map(mouseX, 0, 300, 0, 3));
         if(row < 0 || row > 2 || col < 0 || col > 2) {
-            console.log(`Clicked out of canvas`);
+            //console.log(`Clicked out of canvas`);
             return;
         }
-        console.log(`Clicked row:${row} col:${col}, this.pieces[${row}][${col}]: ${this.pieces[row][col].value}`);
+        //console.log(`Clicked row:${row} col:${col}, this.pieces[${row}][${col}]: ${this.pieces[row][col].value}`);
         this.move(row, col);
     }
 
-    move(row, col) {
-        console.log(`To move: this.pieces[${row}][${col}]: ${this.pieces[row][col].value}`);
+    move(row, col, shuffling) {
+        //console.log(`To move: this.pieces[${row}][${col}]: ${this.pieces[row][col].value}`);
         //top
         if (row - 1 >= 0) {    
             let top = this.pieces[row - 1][col];   
-            console.log("Top", top);
+            //console.log("Top", top);
             if (top.value == "x") {
                 this.swap(row, col, row - 1, col);
             };
@@ -125,7 +125,7 @@ class Board {
         //right
         if (col + 1 < 3) {
             let right = this.pieces[row][col + 1];
-            console.log("Right", right);
+            //console.log("Right", right);
             if (right.value == "x") {
                 this.swap(row, col, row, col + 1);
             };
@@ -133,7 +133,7 @@ class Board {
         //bottom
         if (row + 1 < 3) {
             let bottom = this.pieces[row + 1][col];
-            console.log("Bottom", bottom);
+            //console.log("Bottom", bottom);
             if (bottom.value == "x") {
                 this.swap(row, col, row + 1, col);
             };
@@ -141,7 +141,7 @@ class Board {
         //left
         if (col - 1 >= 0) {
             let left = this.pieces[row][col - 1];
-            console.log("Left", left);
+            //console.log("Left", left);
             if (left.value == "x") {
                 this.swap(row, col, row, col - 1);
             }
@@ -150,29 +150,28 @@ class Board {
         //GLOBAL
         score.moves++;
 
-        if (this.hasWon()) {
+        if (this.hasWon() && !shuffling) {
             celebrate();
         };
     }
 
     swap(row1, col1, row2, col2) {
-        console.log("To swap", this.pieces[row1][col1], this.pieces[row2][col2]);
+        //console.log("To swap", this.pieces[row1][col1], this.pieces[row2][col2]);
         let temp = this.pieces[row1][col1];
         this.pieces[row1][col1] = this.pieces[row2][col2];
         this.pieces[row2][col2] = temp;
-        console.log("After swap", this.pieces[row1][col1], this.pieces[row2][col2]);
+        //console.log("After swap", this.pieces[row1][col1], this.pieces[row2][col2]);
         this.pieces[row1][col1].update(row1, col1);
         this.pieces[row2][col2].update(row2, col2);
     }
 
     shuffle () {
-        loadingSpinner.classList.remove("hide");
         for (let i = 0; i < 10000; i++) {
             let row = floor((random() * 10) % 3);
             let col = floor((random() * 10) % 3);
-            board.move(row, col);
+            let shuffling = true;
+            board.move(row, col, shuffling);
         };
-        loadingSpinner.classList.add("hide");
     }
 
     hasWon () {
@@ -205,7 +204,11 @@ function setup() {
     let canvas = createCanvas(300, 300);
     canvas.parent("puzzle-container");
     board = new Board();
+    loadingSpinner.classList.remove("hide");
     board.shuffle();
+    loadingSpinner.classList.add("hide");
+    score.prevTime = score.time;
+    score.moves = 0;
 }
 
 function draw() {
@@ -217,7 +220,7 @@ function draw() {
 }
 
 function mouseClicked() {
-    console.log("Game Ended", gameEnded());
+    //console.log("Game Ended", gameEnded());
     if (!gameEnded()) {
         board.clicked();
     };
@@ -252,12 +255,15 @@ function celebrate() {
         scoreDisplay.classList.add("hide");
         replayBtn.classList.remove("hide");
         replayBtn.addEventListener("click", () => {
-            console.log("replay click");
+            //console.log("replay click");
             replayBtn.classList.add("hide");
             celebration.classList.add("hide");
             scoreDisplay.classList.remove("hide");
             board = new Board();
+            loadingSpinner.classList.remove("hide");
             board.shuffle();
+            loadingSpinner.classList.add("hide");
             score.prevTime = score.time;
+            score.moves = 0;
         });
 }
