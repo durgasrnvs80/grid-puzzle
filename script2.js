@@ -205,7 +205,7 @@ function setup() {
     let canvas = createCanvas(300, 300);
     canvas.parent("puzzle-container");
     board = new Board();
-    //board.shuffle();
+    board.shuffle();
 }
 
 function draw() {
@@ -257,6 +257,7 @@ function celebrate() {
             celebration.classList.add("hide");
             scoreDisplay.classList.remove("hide");
             board = new Board();
+            board.shuffle();
             score.prevTime = score.time;
         });
 }
