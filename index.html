@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grid Puzzle</title>
     <link href="styles.css" rel="stylesheet">
-    <script src="script.js" defer></script>
+    <script src="script2.js" defer></script>
     <script src="p5.js" defer></script>    
 </head>
 <body>
@@ -14,11 +14,14 @@
     </header>
     <main>
         <div id="puzzle-container">
+            <img id="loading-spinner" alt="loading" class="hide" src="images/loadingSpinner2.gif">
+            <p id="celebration" class="hide"></p>
         </div>
+        <button id="replay" type="button" class="hide">Play again?</button>
     </main>
     <footer>
-       <p>~ ( O _ O ) ~</p>
-       <P id="time"></p>
+        <p>~ ( O _ O ) ~</p>
+        <P id="score-display"></p>
     </footer>
 </body>
 </html>
